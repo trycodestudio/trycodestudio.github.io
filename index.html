@@ -302,6 +302,67 @@
         color: var(--muted);
         font-size: 15.5px;
       }
+      .portfolio-list {
+        display: grid;
+        gap: 24px;
+      }
+      .portfolio-card {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 28px 24px;
+      }
+      .portfolio-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 12px;
+      }
+      .portfolio-tag {
+        font-family: "JetBrains Mono", ui-monospace, Menlo, monospace;
+        font-size: 13px;
+        color: var(--link);
+        font-weight: 500;
+      }
+      .portfolio-badge {
+        font-family: "JetBrains Mono", ui-monospace, Menlo, monospace;
+        font-size: 12px;
+        padding: 2px 8px;
+        border-radius: 999px;
+        background: var(--bg);
+        color: var(--link);
+        border: 1px solid var(--line);
+      }
+      .portfolio-card h3 {
+        font-family: "JetBrains Mono", ui-monospace, Menlo, monospace;
+        font-size: 20px;
+        margin: 0 0 10px;
+      }
+      .portfolio-card p {
+        margin: 0 0 18px;
+        color: var(--muted);
+      }
+      .portfolio-tech {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 22px;
+      }
+      .portfolio-tech span {
+        font-family: "JetBrains Mono", ui-monospace, Menlo, monospace;
+        font-size: 12.5px;
+        padding: 3px 10px;
+        border-radius: 6px;
+        background: var(--bg);
+        border: 1px solid var(--line);
+        color: var(--muted);
+      }
+      .portfolio-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
       .empty {
         background: var(--surface);
         border: 1.5px dashed var(--line);
@@ -481,15 +542,44 @@
         <section id="portofolio">
           <h2>Portofolio</h2>
           <p class="sub">
-            Proyek-proyek pertama sedang disiapkan dan akan tampil di sini.
+            Beberapa hasil pengerjaan proyek dan demo dari trycode_ studio.
           </p>
-          <div class="empty">
-            <h3>Slot proyek pertama masih kosong</h3>
-            <p>
-              Kalau kamu punya ide yang ingin dicoba, ini kesempatan untuk jadi
-              proyek pertama yang tampil di sini.
-            </p>
-            <a class="btn ghost" href="#kontak">Ceritakan ideamu</a>
+          <div class="portfolio-list">
+            <article class="portfolio-card">
+              <div class="portfolio-header">
+                <span class="portfolio-tag">Website & Landing Page</span>
+                <span class="portfolio-badge">Live</span>
+              </div>
+              <h3>Pratama Apparel</h3>
+              <p>
+                Landing page toko apparel dan konveksi baju olahraga & lapangan
+                (jersey, kemeja PDL, jaket outdoor) dengan katalog produk interaktif,
+                quick view & modal size chart, keranjang belanja multi-item, serta
+                integrasi pemesanan langsung ke WhatsApp.
+              </p>
+              <div class="portfolio-tech">
+                <span>React</span>
+                <span>Tailwind CSS</span>
+                <span>Vite</span>
+                <span>WhatsApp Order</span>
+              </div>
+              <div class="portfolio-actions">
+                <a
+                  class="btn"
+                  href="https://trycodestudio.github.io/apparelshop-lp/"
+                  target="_blank"
+                  rel="noopener"
+                  >Lihat Demo</a
+                >
+                <a
+                  class="btn ghost"
+                  href="https://github.com/trycodestudio/apparelshop-lp"
+                  target="_blank"
+                  rel="noopener"
+                  >GitHub Repo</a
+                >
+              </div>
+            </article>
           </div>
         </section>
       </div>
