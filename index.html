@@ -302,15 +302,79 @@
         color: var(--muted);
         font-size: 15.5px;
       }
+      .portfolio-carousel {
+        position: relative;
+      }
+      .portfolio-viewport {
+        overflow: hidden;
+        border-radius: 12px;
+      }
       .portfolio-list {
         display: grid;
-        gap: 24px;
+        grid-auto-columns: 100%;
+        grid-auto-flow: column;
+        width: 100%;
+        transition: transform 320ms ease;
       }
       .portfolio-card {
+        width: 100%;
+        box-sizing: border-box;
         background: var(--surface);
         border: 1px solid var(--line);
         border-radius: 12px;
         padding: 28px 24px;
+      }
+      .portfolio-controls {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-top: 16px;
+      }
+      .portfolio-control-group,
+      .portfolio-dots {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .portfolio-control,
+      .portfolio-dot {
+        color: var(--text);
+        background: var(--surface);
+        border: 1px solid var(--line);
+        cursor: pointer;
+      }
+      .portfolio-control {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        font-size: 20px;
+      }
+      .portfolio-dot {
+        width: 9px;
+        height: 9px;
+        padding: 0;
+        border-radius: 999px;
+      }
+      .portfolio-dot[aria-current="true"] {
+        width: 24px;
+        background: var(--link);
+        border-color: var(--link);
+      }
+      .portfolio-count {
+        color: var(--muted);
+        font-family: "JetBrains Mono", ui-monospace, Menlo, monospace;
+        font-size: 13px;
+      }
+      .portfolio-control:focus-visible,
+      .portfolio-dot:focus-visible {
+        outline: 2px solid var(--link);
+        outline-offset: 3px;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .portfolio-list {
+          transition: none;
+        }
       }
       .portfolio-header {
         display: flex;
@@ -544,7 +608,9 @@
           <p class="sub">
             Beberapa hasil pengerjaan proyek dan demo dari trycode_ studio.
           </p>
-          <div class="portfolio-list">
+          <div class="portfolio-carousel" role="region" aria-roledescription="carousel" aria-label="Proyek portfolio">
+            <div class="portfolio-viewport" tabindex="0">
+              <div class="portfolio-list">
             <article class="portfolio-card">
               <div class="portfolio-header">
                 <span class="portfolio-tag">Website & Landing Page</span>
@@ -580,6 +646,50 @@
                 >
               </div>
             </article>
+            <article class="portfolio-card">
+              <div class="portfolio-header">
+                <span class="portfolio-tag">Website & Landing Page</span>
+                <span class="portfolio-badge">Live</span>
+              </div>
+              <h3>Abbasy</h3>
+              <p>
+                Landing page fast food lokal Berau yang menampilkan menu unggulan
+                seperti Ayam Mabar dan Chicken Cheese Burger, informasi cabang,
+                serta tautan pemesanan lewat WhatsApp, GoFood, dan GrabFood.
+              </p>
+              <div class="portfolio-tech">
+                <span>HTML</span>
+                <span>CSS</span>
+                <span>JavaScript</span>
+                <span>WhatsApp & Food Delivery</span>
+              </div>
+              <div class="portfolio-actions">
+                <a
+                  class="btn"
+                  href="https://trycodestudio.github.io/abbasy-lp/"
+                  target="_blank"
+                  rel="noopener"
+                  >Lihat Demo</a
+                >
+                <a
+                  class="btn ghost"
+                  href="https://github.com/trycodestudio/abbasy-lp"
+                  target="_blank"
+                  rel="noopener"
+                  >GitHub Repo</a
+                >
+              </div>
+            </article>
+              </div>
+            </div>
+            <div class="portfolio-controls">
+              <span class="portfolio-count" aria-live="polite">01 / 02</span>
+              <div class="portfolio-dots" aria-label="Pilih proyek"></div>
+              <div class="portfolio-control-group">
+                <button class="portfolio-control" type="button" data-direction="prev" aria-label="Proyek sebelumnya">‹</button>
+                <button class="portfolio-control" type="button" data-direction="next" aria-label="Proyek berikutnya">›</button>
+              </div>
+            </div>
           </div>
         </section>
       </div>
@@ -674,6 +784,65 @@
           }
         }
         tick();
+      })();
+
+      (function () {
+        var carousel = document.querySelector(".portfolio-carousel");
+        if (!carousel) return;
+
+        var track = carousel.querySelector(".portfolio-list");
+        var slides = Array.prototype.slice.call(
+          track.querySelectorAll(".portfolio-card"),
+        );
+        var dots = carousel.querySelector(".portfolio-dots");
+        var count = carousel.querySelector(".portfolio-count");
+        var current = 0;
+
+        slides.forEach(function (slide, index) {
+          var dot = document.createElement("button");
+          dot.type = "button";
+          dot.className = "portfolio-dot";
+          dot.setAttribute("aria-label", "Tampilkan proyek " + (index + 1));
+          dot.addEventListener("click", function () {
+            show(index);
+          });
+          dots.appendChild(dot);
+        });
+
+        var dotButtons = dots.querySelectorAll(".portfolio-dot");
+
+        function show(index) {
+          current = (index + slides.length) % slides.length;
+          track.style.transform = "translateX(-" + current * 100 + "%)";
+          slides.forEach(function (slide, i) {
+            slide.setAttribute("aria-hidden", String(i !== current));
+            slide.inert = i !== current;
+            dotButtons[i].setAttribute(
+              "aria-current",
+              String(i === current),
+            );
+          });
+          count.textContent =
+            String(current + 1).padStart(2, "0") +
+            " / " +
+            String(slides.length).padStart(2, "0");
+        }
+
+        carousel.querySelectorAll(".portfolio-control").forEach(function (button) {
+          button.addEventListener("click", function () {
+            show(current + (button.dataset.direction === "next" ? 1 : -1));
+          });
+        });
+
+        carousel.querySelector(".portfolio-viewport").addEventListener(
+          "keydown",
+          function (event) {
+            if (event.key === "ArrowRight") show(current + 1);
+            if (event.key === "ArrowLeft") show(current - 1);
+          },
+        );
+
+        show(0);
       })();
     </script>
   </body>
